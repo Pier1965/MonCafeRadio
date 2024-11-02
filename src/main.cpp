@@ -77,7 +77,7 @@ Otto baroque si sente a volte bene e a volte con singhiozzo a buffer 64, con 32 
 	Aggiunto il telecomando Zodiac
   	01/11/2024
     Da fare:
-    Aggiungere radio FM asservita con secondo esp32
+    Aggiungere radio FM con secondo esp32 slave
     Aggiungere verifica sulla coerenza dei dati Pos.1 Pos.2 immessi per la modifica
     della lista di radio.
     Evitare che all'upload della lista di radio si passi alla
