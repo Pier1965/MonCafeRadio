@@ -15,7 +15,7 @@ decode_results results;
 // Display TFT 2.8 ST7789
 #ifdef ST7789
   Arduino_DataBus *bus = new Arduino_ESP32SPI(TFT_DC /* DC */, TFT_CS /* CS */, TFT_SCL /* SCK */, TFT_SDA /* MOSI */, GFX_NOT_DEFINED /* MISO */, VSPI /* spi_num */);
-  Arduino_GFX *display = new Arduino_ST7789(  bus, TFT_RST /* RST */, 0 /* rotation */);
+  Arduino_GFX *display = new Arduino_ST7789(  bus, TFT_RST /* RST */, 1 /* rotation */);
 #endif
 // Ora data
 // Inserire qui la timezone come da ->  https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
@@ -66,8 +66,11 @@ JsonArray radioRecords = jsonDoc_tx.to<JsonArray>();
 StaticJsonDocument<200> jsonDoc_rx;
 JsonArray radioAlterate = jsonDoc_rx.to<JsonArray>();
 JsonObject record;
+// pacchetto json per invio info sazione e evolume alla pag html
+StaticJsonDocument<200> jsonDoc_STVOL;
 // Oggetto json stringhificato per comunicazione via websocket
 String jsonString = "";
+String jsonString1 = "";
 // Oggetti del display touch NEXTION
 #ifdef NEXTOUCH
   NexButton pvsBtn = NexButton(0, 2, "b1");

@@ -76,8 +76,14 @@ Otto baroque si sente a volte bene e a volte con singhiozzo a buffer 64, con 32 
 	Aggiunto un rele che spegne l'amplificatore audio in modalità orologio
 	Aggiunto il telecomando Zodiac
   	01/11/2024
-    Da fare:
-    Aggiungere radio FM asservita con secondo esp32
+27) Risolto problema grafico che 2.8" da con NODEMCU Wroom forse per scarsa memoria
+  riscrivendo la funzione di cancellazione schermo a rettangolini. Lasciata anche per 
+  WROVER che a volte non cancellava bene sfondo.
+    13/11/2024
+28) Aggiunto ritardo ad riaccensione ampli dopo spegnimento per evitare bump casse
+    14/11/24
+Da fare
+    Aggiungere radio FM con secondo esp32 slave
     Aggiungere verifica sulla coerenza dei dati Pos.1 Pos.2 immessi per la modifica
     della lista di radio.
     Evitare che all'upload della lista di radio si passi alla
@@ -88,14 +94,21 @@ Otto baroque si sente a volte bene e a volte con singhiozzo a buffer 64, con 32 
 //=================================================================================
 */
 #include "preproDefine.h"
+#include "HWsettingsDefine.h"
 #include "define.h"
 #include "GlobalVar.h"
 #include "includeLib.h"
 #include "GlobalObject.h"
 #include "includeFun.h"
 //=================================================================================
+
 void setup()
 {
+  #ifdef HWRCampli
+    DEBUG_PRINTLN("Spengo amplificatore SETUP");
+    digitalWrite(HWRC, MODEAMPOFF);
+    offTimer = millis();
+  #endif
   #ifdef SPION
     Serial.begin(115200);
   #endif
@@ -104,6 +117,7 @@ void setup()
   // Setup schermo : Strano... se messo dopo setupInt fa incartare l'ascolto
   #ifdef SCREEN
     initSCR();
+    delay(1000);
   #endif
     // Inizializzazione del NEXTION se usato
   #ifdef NEXTOUCH
@@ -113,13 +127,13 @@ void setup()
   // per immettere i valori di rete e ip della radio via browser
   // Se non vengono immessi attende 120 sec, va in timeout e si riavvia.
   //=================================================================================
+  #ifdef SCREEN
+    printSCR_attesaWL();
+  #endif
   if (!wifi_connect())
   {
     DEBUG_PRINTLN("Non Connesso...");
     DEBUG_PRINTLN("ESP si riavvia...");
-  #ifdef SCREEN
-      updateAPSCR(TIMEOUT);
-  #endif
     delay(5000);
     ESP.restart();
   }
@@ -191,7 +205,7 @@ void setup()
   // Se la levetta è in modalità orologio spegni il wifi
   //=================================================================================
   // Sostituzione della levetta bistabile con un pulsante: all'accensione
-  // parto all'accensione  in modalità clock
+  // parto sempre in modalità clock
   //WMode = workingMode();
   WMode = false;
   oldWMode = WMode;
@@ -200,9 +214,6 @@ void setup()
   DEBUG_PRINTLN("");
   if (!WMode)
   {
-    #ifdef HWRCampli
-      digitalWrite(HWRC, LOW);
-    #endif
     DEBUG_PRINTLN("Disconnessione e spegnimento WiFi...");
     WiFi.disconnect(true);
     WiFi.mode(WIFI_OFF);
@@ -216,8 +227,11 @@ void setup()
   else
   {
     #ifdef HWRCampli
-      DEBUG_PRINTLN("Spengo amplificatore");
-      digitalWrite(HWRC, HIGH);
+      DEBUG_PRINTLN("Accendo amplificatore");
+      unsigned long attesa = millis() - offTimer;
+      if( attesa < Tdebump)
+        delay(Tdebump - attesa + 100);
+      digitalWrite(HWRC, MODEAMPON);
     #endif
     stream.setVolume(VOLUME);
     JsonObject record = radioRecords[STATION].as<JsonObject>();
@@ -262,9 +276,15 @@ void loop()
       // Accendo l'ampli audio
       #ifdef HWRCampli
         DEBUG_PRINTLN("Accendo amplificatore");
-        digitalWrite(HWRC, HIGH);
+        unsigned long attesa = millis() - offTimer;
+        if( attesa < Tdebump)
+          delay(Tdebump - attesa + 100);
+        digitalWrite(HWRC, MODEAMPON);
       #endif
       // Riaccendo il WIFI
+      #ifdef SCREEN
+        printSCR_attesaWL();
+      #endif 
       if (!wifi_connect())
       {
         DEBUG_PRINTLN("Non Connesso...");
@@ -335,7 +355,8 @@ void loop()
       // Spengo l'amplificatore audio
       #ifdef HWRCampli
         DEBUG_PRINTLN("Spengo amplificatore");
-        digitalWrite(HWRC, LOW);
+        digitalWrite(HWRC, MODEAMPOFF);
+        offTimer = millis();
       #endif
       DEBUG_PRINTLN("Disconnessione e spegnimento WiFi...");
       stream.stopSong();
@@ -377,61 +398,62 @@ void loop()
       #endif
       // Check dei tasti e dei comandi IR
       checkIR();
-      switch (checkButtons())
-      {
-      case STNCH:
-        stream.stopSong();
-        delay(1000);
-        record = radioRecords[STATION].as<JsonObject>();
-        if (record.containsKey(POS2))
-        {
-          url = record[POS2];
-          DEBUG_PRINTLN(url);
-        }
-        // Gestione eventuale mancata connessione
-        // e cambio del canale. Da gestire mancata connessione a tutti
-        // i canali
-        while (!stream.connecttohost(url))
-        {
-          // L'host non è disponibile... cambio canale
-          DEBUG_PRINTLN("Host non connesso");
+      switch (checkButtons()){
+        case STNCH:
+          stream.stopSong();
           delay(1000);
-          // Qui gestire la mancata connessione
-          if (nxtButton == 1)
-          {
-            STATION < (NR - 1) ? STATION++ : STATION = 0;
-          }
-          else
-          {
-            STATION > 0 ? STATION-- : STATION = NR - 1;
-          }
-          updateEeprom();
           record = radioRecords[STATION].as<JsonObject>();
           if (record.containsKey(POS2))
           {
             url = record[POS2];
+            DEBUG_PRINTLN(url);
           }
-        }
-        DEBUG_PRINTDEC(STATION);
-        DEBUG_PRINTLN();
-        #ifdef SCREEN
-                updateSCR();
-        #endif
-        #ifdef NEXTOUCH
-                updateSCR_nex();
-        #endif
-        break;
-      case VOLCH:
-        stream.setVolume(VOLUME);
-        DEBUG_PRINTDEC(VOLUME);
-        DEBUG_PRINTLN();
-        #ifdef SCREEN
-                updateSCR();
-        #endif
-        #ifdef NEXTOUCH
-                updateSCR_nex();
-        #endif
-        break;
+          // Gestione eventuale mancata connessione
+          // e cambio del canale. Da gestire mancata connessione a tutti
+          // i canali
+          while (!stream.connecttohost(url))
+          {
+            // L'host non è disponibile... cambio canale
+            DEBUG_PRINTLN("Host non connesso");
+            delay(1000);
+            // Qui gestire la mancata connessione
+            if (nxtButton == 1)
+            {
+              STATION < (NR - 1) ? STATION++ : STATION = 0;
+            }
+            else
+            {
+              STATION > 0 ? STATION-- : STATION = NR - 1;
+            }
+            updateEeprom();
+            record = radioRecords[STATION].as<JsonObject>();
+            if (record.containsKey(POS2))
+            {
+              url = record[POS2];
+            }
+          }
+          updatePlayAndVolumeHtml();
+          DEBUG_PRINTDEC(STATION);
+          DEBUG_PRINTLN();
+          #ifdef SCREEN
+                  updateSCR();
+          #endif
+          #ifdef NEXTOUCH
+                  updateSCR_nex();
+          #endif
+          break;
+        case VOLCH:
+          stream.setVolume(VOLUME);
+          DEBUG_PRINTDEC(VOLUME);
+          DEBUG_PRINTLN();
+          #ifdef SCREEN
+                  updateSCR();
+          #endif
+          #ifdef NEXTOUCH
+                  updateSCR_nex();
+          #endif
+          updatePlayAndVolumeHtml();
+          break;
       }
       if (checkTime())
       {

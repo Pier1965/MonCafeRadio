@@ -87,7 +87,7 @@ bool initRadioFileList(){
             DEBUG_PRINTLN("Impossibile creare file radio in scrittura");
             return false;
         } else {
-            // Creo un file iniziale con 2 stazioni
+            // Creo un file iniziale con 4 stazioni
             // Prima memorizzo i dati delle stazioni nella matrice
             // Json delle radio radioRecords che è un array
             // nel documento jsonDoc_tx
@@ -177,7 +177,7 @@ bool initRadioFileList(){
         }
     }
 }
-// Funzione che aggiorna il recode json delle radio e il file
+// Funzione che aggiorna il recode json delle radio e il file html
 bool updateFileRadio(){
     jsonString = "";
     serializeJson(jsonDoc_tx, jsonString);
@@ -195,5 +195,18 @@ bool updateFileRadio(){
     DEBUG_PRINTLN(" stazioni");
     //serializeJson(jsonDoc_tx, jsonString);
     webSocket.broadcastTXT(jsonString);
+    return true;
+}
+// Funzione che aggiorna la pagina web con stazione in onda e volume
+bool updatePlayAndVolumeHtml(){
+    jsonString1 = "";
+    jsonDoc_STVOL["VOL"] = VOLUME;
+    jsonDoc_STVOL["STN"] = STATION;
+    radioRecords.createNestedObject();
+    jsonDoc_STVOL["NAME"] = radioRecords[STATION][POS3];
+    serializeJson(jsonDoc_STVOL, jsonString1);
+    DEBUG_PRINTLN(jsonString1);
+    webSocket.broadcastTXT(jsonString1);
+    DEBUG_PRINTLN("Inviati vol e stn a webserver");
     return true;
 }

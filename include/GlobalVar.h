@@ -1,6 +1,8 @@
 bool WMode, oldWMode;
 // Timer
 unsigned long elapsedTime;
+// Timer spegnimento ampli
+unsigned long offTimer;
 // Numero di stazioni temporaneo
 // Numero di stazioni effettivo verrà recuperato dal file degli streams
 unsigned char NR = 2;
