@@ -1,0 +1,146 @@
+[
+  {
+    "pos": 0,
+    "stream": "http://icestreaming.rai.it/1.mp3",
+    "nome": "Rai Radio 1",
+    "genere": "Generalista"
+  },
+  {
+    "pos": 1,
+    "stream": "http://icestreaming.rai.it/2.mp3",
+    "nome": "Rai Radio 2",
+    "genere": "Cagate"
+  },
+  {
+    "pos": 2,
+    "stream": "http://icestreaming.rai.it/3.mp3",
+    "nome": "Rai Radio 3",
+    "genere": "Cultura"
+  },
+  {
+    "pos": 3,
+    "stream": "http://shoutcast2.radio24.it:8000/",
+    "nome": "Radio 24 Il Sole",
+    "genere": "Economia"
+  },
+  {
+    "pos": 4,
+    "stream": "http://91.121.38.216:8060",
+    "nome": "Studio Radio",
+    "genere": "Vintage"
+  },
+  {
+    "pos": 5,
+    "stream": "http://radiostreaming.ert.gr/ert-kosmos",
+    "nome": "Kosmos Gr",
+    "genere": "Leggero"
+  },
+  {
+    "pos": 6,
+    "stream": "http://kraskp.ru:8000/mskregion",
+    "nome": "Komsomolskaia Pravda",
+    "genere": "Informazione"
+  },
+  {
+    "pos": 7,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb008",
+    "nome": "RMC Ottanta",
+    "genere": "Ottanta"
+  },
+  {
+    "pos": 8,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb010",
+    "nome": "RMC Marine",
+    "genere": "Lounge"
+  },
+  {
+    "pos": 9,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb012",
+    "nome": "RMC Night Story",
+    "genere": "Night Story"
+  },
+  {
+    "pos": 10,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb016",
+    "nome": "RMC Sensual Rock",
+    "genere": "Soft Rock"
+  },
+  {
+    "pos": 11,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb018",
+    "nome": "RMC Party",
+    "genere": "Party"
+  },
+  {
+    "pos": 12,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb020",
+    "nome": "RMC Lounge",
+    "genere": "Lounge"
+  },
+  {
+    "pos": 13,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb024",
+    "nome": "RMC Summer",
+    "genere": "Summer"
+  },
+  {
+    "pos": 14,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb002",
+    "nome": "RMC Buddha",
+    "genere": "Lounge"
+  },
+  {
+    "pos": 15,
+    "stream": "http://edge.radiomontecarlo.net/rmcweb025",
+    "nome": "RMC Funky",
+    "genere": "Funk"
+  },
+  {
+    "pos": 16,
+    "stream": "http://strm112.1.fm/baroque_mobile_mp3",
+    "nome": "1FM Otto Baroque",
+    "genere": "Classica"
+  },
+  {
+    "pos": 17,
+    "stream": "http://icestreaming.rai.it/5.mp3",
+    "nome": "Radio Rai Classica",
+    "genere": "Classica"
+  },
+  {
+    "pos": 18,
+    "stream": "https://stream.srg-ssr.ch/m/rsc_it/mp3_128",
+    "nome": "Radio Swiss Classica",
+    "genere": "Classica"
+  },
+  {
+    "pos": 19,
+    "stream": "http://wgbh.streamguys.com/Bach-8108",
+    "nome": "Boston Bach",
+    "genere": "Classica"
+  },
+  {
+    "pos": 20,
+    "stream": "http://jfm1.hostingradio.ru:14536/ijstream.mp3",
+    "nome": "Radio Jazz 89.1",
+    "genere": "Jazz"
+  },
+  {
+    "pos": 21,
+    "stream": "http://jazz.streamr.ru/jazz-64.mp3",
+    "nome": "Jazz Ru",
+    "genere": "Jazz"
+  },
+  {
+    "pos": 22,
+    "stream": "http://giffard.streampunk.cc/_stream/ondarossa.mp3",
+    "nome": "Onda Rossa",
+    "genere": "Generica"
+  },
+  {
+    "pos": 23,
+    "stream": "http://icecast.unitedradio.it/Virgin.mp3",
+    "nome": "Virgin Radio",
+    "genere": "Rock"
+  }
+]
