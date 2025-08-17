@@ -3,10 +3,24 @@
 void addRadio(JsonArray& array, unsigned char field1, const char* field2, const char* field3, const char* field4){
     if((field1 < 0) || (field1 > NR))
         field1 = NR;
+    DEBUG_PRINT("Ora ci sono ");
+    DEBUG_PRINTDEC(NR);
+    DEBUG_PRINTLN(" stazioni");
+    DEBUG_PRINT("Aggiungo in posizione ");
+    DEBUG_PRINTDEC(field1);
+    DEBUG_PRINTLN("");
+    uint8_t numeroRecords = array.size(); 
+    DEBUG_PRINT("Dimensione lista prima di aggiungere ");
+    DEBUG_PRINTDEC(numeroRecords);
+    DEBUG_PRINTLN("");
     // Aggiungo un nuovo record in coda
+    DEBUG_PRINTLN("Aggiungo in coda ");
     array.createNestedObject();
     // Conto il numero di record presenti
-    uint8_t numeroRecords = array.size();
+    numeroRecords = array.size(); // <-----------------
+    DEBUG_PRINT("Dimensione lista ora ");
+        DEBUG_PRINTDEC(numeroRecords);
+        DEBUG_PRINTLN("");
     // Copio i record dalla posizione in cui inserire il nuovo stream
     // di una posizione in alto e aggiorno il numero di posizione incrementandolo
     for(int i=numeroRecords-2; i>=field1; i--){
@@ -23,15 +37,18 @@ void addRadio(JsonArray& array, unsigned char field1, const char* field2, const 
     buffer[0] = '\0';
     sprintf(buffer, field3);
     array[field1][POS3] = buffer;
+    DEBUG_PRINTLN(buffer);
     buffer[0] = '\0';
     sprintf(buffer, field4);
     array[field1][POS4] = buffer;
+    DEBUG_PRINTLN("Entrato in comando add fine comando");
 }
 // Funzione che cancella il record di posizione field1 dall'array di records passato
 void delRadio(JsonArray& array, const unsigned char field1){
     array.remove(field1);
     // Aggiorno gli indici delle radio successive
     NR = array.size();
+    
     for(int i=field1; i<=NR-1; i++){
         array[i][POS1]  = (unsigned char) (i);
     }
@@ -87,7 +104,7 @@ bool initRadioFileList(){
             DEBUG_PRINTLN("Impossibile creare file radio in scrittura");
             return false;
         } else {
-            // Creo un file iniziale con 2 stazioni
+            // Creo un file iniziale con 4 stazioni
             // Prima memorizzo i dati delle stazioni nella matrice
             // Json delle radio radioRecords che è un array
             // nel documento jsonDoc_tx
@@ -177,7 +194,7 @@ bool initRadioFileList(){
         }
     }
 }
-// Funzione che aggiorna il recode json delle radio e il file
+// Funzione che aggiorna il recode json delle radio e il file html
 bool updateFileRadio(){
     jsonString = "";
     serializeJson(jsonDoc_tx, jsonString);
@@ -195,5 +212,18 @@ bool updateFileRadio(){
     DEBUG_PRINTLN(" stazioni");
     //serializeJson(jsonDoc_tx, jsonString);
     webSocket.broadcastTXT(jsonString);
+    return true;
+}
+// Funzione che aggiorna la pagina web con stazione in onda e volume
+bool updatePlayAndVolumeHtml(){
+    jsonString1 = "";
+    jsonDoc_STVOL["VOL"] = VOLUME;
+    jsonDoc_STVOL["STN"] = STATION;
+    radioRecords.createNestedObject();
+    jsonDoc_STVOL["NAME"] = radioRecords[STATION][POS3];
+    serializeJson(jsonDoc_STVOL, jsonString1);
+    DEBUG_PRINTLN(jsonString1);
+    webSocket.broadcastTXT(jsonString1);
+    DEBUG_PRINTLN("Inviati vol e stn a webserver");
     return true;
 }

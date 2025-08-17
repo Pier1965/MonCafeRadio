@@ -11,6 +11,8 @@ Settings
 --------
 The following files could/should be altered in order to personalize the compilation
 process. This latter can been performed relying on VS code and the Platformio plugin:
+- include/HWsettingsDefine.h (define HW preferencies: screen model, use of a relay
+	to switch on and off audio ampli, infrared remote control model); 
 - platformio.ini (set the esp32 model);
 - include/gpio.h (for different pinout configuration);
 - include/define.h (change OLED dimensions and pinout, enable use of NEXTION touch);

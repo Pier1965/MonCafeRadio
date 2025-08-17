@@ -42,3 +42,8 @@
 #ifdef NEXTOUCH
     #include<Nextion.h>
 #endif
+// gestione modulo FM TEA5767
+#ifdef FMMOD
+    #include <Wire.h>
+    #include <TEA5767Radio.h>
+#endif

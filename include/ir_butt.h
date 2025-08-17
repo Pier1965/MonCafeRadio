@@ -1,12 +1,4 @@
 //IR codifica tasti
-//#define APPLE_IR
-//#define ELEGO_IR
-//#define SAMS_IR
-//#define CARMP3
-//#define PHILIPSRC5340
-//#define KC808
-//#define TANIX //SMART TV BOX TANIX TX5 MAX
-#define ZODIAC
 #ifdef ZODIAC
   #define IR_UP 0xFF7887
   #define IR_UP1 0xF63C8657

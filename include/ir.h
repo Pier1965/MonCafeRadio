@@ -158,11 +158,11 @@ void checkIR(){
             delay(1000);
             updateEeprom();
             WMode = !WMode;
-            DEBUG_PRINTLN("Cambio modalità di funzionamento");
+            DEBUG_PRINTLN("IR zodiac  - Cambio modalità di funzionamento");
           break; 
         #endif
         case IR_RS:
-          DEBUG_PRINTLN("Cambio modalità di funzionamento");
+          DEBUG_PRINTLN("IR - Cambio modalità di funzionamento");
           delay(1000);
           updateEeprom();
           //ESP.restart(); Tasto di spegnimento del telecomando x reset
@@ -271,7 +271,7 @@ void checkIR(){
 }
 //-----------------------------------------------------------------------------------
 // Controllo del cambio stato clock <-> radio in modalità clock del solo tasto reset
-bool checkReset(){
+void checkResetIR(){
   // Inviato codice IR?
   if (irrecv.decode(&results)) {
     // Utile per testare i codici di un nuovo telecomando
@@ -293,5 +293,5 @@ bool checkReset(){
     #endif
     irrecv.resume();
   }
-  return(WMode);
+  return;
 }

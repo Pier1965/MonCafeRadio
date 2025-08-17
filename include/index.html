@@ -34,6 +34,8 @@ const char htmlContent[] PROGMEM = R"rawliteral(
         </style>
     </head>
     <body>
+        <h1><left>Now playing: <span id="stn">-</span> <span id="nomePlaying">-</span></left></h1>
+        <h1><left>Playing volume: <span id="vol">-</span></left></h1></left></h1>
         <h1><center>Lista delle Radio Web</center></h1>
         <table class="stripe" style="border: 1px solid black;">
         <thead>
@@ -108,20 +110,29 @@ const char htmlContent[] PROGMEM = R"rawliteral(
         }
         function processCommand(event){
         var tabRadio = document.getElementById('listaRadio');
-        tabRadio.innerHTML = "";
         var row = "";
         var obj = JSON.parse(event.data);
         jsonList = obj;
         console.log("Sono in processCommand");
-        console.log(String(obj.length));
-        for(var i = 0; i < obj.length; i++){
-        row = `<tr>
-        <td>${obj[i].pos}</td>
-        <td>${obj[i].stream}</td>
-        <td>${obj[i].nome}</td>
-        <td>${obj[i].genere}</td></tr>`;
-        tabRadio.innerHTML += row;
-        };
+        console.log("Lunghezza comando " + String(obj.length));
+        var msgLen=obj.length;
+        if(msgLen > 3){
+            tabRadio.innerHTML = "";
+            for(var i = 0; i < msgLen; i++){
+            row = `<tr>
+            <td>${obj[i].pos}</td>
+            <td>${obj[i].stream}</td>
+            <td>${obj[i].nome}</td>
+            <td>${obj[i].genere}</td></tr>`;
+            tabRadio.innerHTML += row;
+            };
+        }else{
+            console.log("Sono in processcommand vol e stn");
+            console.log("Lunghezza comando " + msgLen);
+            document.getElementById('stn').textContent=obj.STN;
+            document.getElementById('nomePlaying').textContent=obj.NAME;
+            document.getElementById('vol').textContent=obj.VOL;
+        }
         }
         window.onload = function(event){
         init();
@@ -129,6 +140,7 @@ const char htmlContent[] PROGMEM = R"rawliteral(
         function button_send_back(){
         var cmdTxt = document.getElementById('comando').value;
         var nomeTxt = document.getElementById('nome').value;
+        console.log("Nome radio " + nomeTxt);
         var geneTxt = document.getElementById('gene').value;
         var pos1Txt = document.getElementById('txt1').value;
         var pos2Txt = document.getElementById('txt2').value;

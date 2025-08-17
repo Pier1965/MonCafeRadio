@@ -5,6 +5,7 @@ void initSCR() {
     DEBUG_PRINTLN(F("SSD1306 allocation failed... System locked"));
     for(;;); // Don't proceed, loop forever
   }
+  DEBUG_PRINTLN(F("SSD1306 partito"));
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -93,6 +94,12 @@ void printSCR_yesnet(){
         display.println(WiFi.localIP());
         display.display();
 }
+void printSCR_nomp3(){
+        display.clearDisplay();
+        display.setCursor(0, 0);
+        display.print("No mp3 module");
+        display.display();
+}
 void printSCR_nonet(){
         display.clearDisplay();
         display.setCursor(0, 0);
@@ -100,6 +107,7 @@ void printSCR_nonet(){
         display.display();
 }
 void printSCR_attesaWL(){
+        display.setTextSize(1);
         display.clearDisplay();
         display.setCursor(0, 0);
         display.println("Attesa WIFI!");

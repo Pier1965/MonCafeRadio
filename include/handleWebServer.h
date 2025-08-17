@@ -49,7 +49,10 @@ void webSocketEvent(byte num, WStype_t type, uint8_t * payload, size_t length){
       }
       if(s_msg_cmd == "add"){
         DEBUG_PRINTLN("Comando add");
+        DEBUG_PRINTLN(msg_pos1);
         DEBUG_PRINTLN(msg_url);
+        DEBUG_PRINTLN(msg_nome);
+        DEBUG_PRINTLN(msg_gene);
         DEBUG_PRINT("Ora ci sono ");
         DEBUG_PRINTDEC(NR);
         DEBUG_PRINTLN(" stazioni");

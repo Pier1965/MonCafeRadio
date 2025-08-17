@@ -1,11 +1,13 @@
 bool WMode, oldWMode;
 // Timer
 unsigned long elapsedTime;
+// Timer spegnimento ampli
+unsigned long offTimer;
 // Numero di stazioni temporaneo
 // Numero di stazioni effettivo verrà recuperato dal file degli streams
 unsigned char NR = 2;
 // Debouncing parameters
-long debT = 200; //Debouncing Time in Milliseconds
+long debT = 50; //Debouncing Time in Milliseconds
 // definizione pin 
 #include "gpio.h"
 // Volume e stazioni
@@ -40,3 +42,7 @@ unsigned long currentWsMillis = 0;
 const unsigned long updateWsTime = 60000; // aggiornamento websocket 
 // Inizializzazione NEXTION
 bool nexExists = false;
+// Modulo radio FM
+#ifdef FMMOD
+ float frequency = 88.0;    
+#endif

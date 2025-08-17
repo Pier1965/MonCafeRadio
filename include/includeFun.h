@@ -6,11 +6,13 @@
 #include "datetime.h"
 #include "confSelector.h"
 // Recupero di dati di volume e stazione da eeprom. Si serve di NR
-#include"Eeprom.h"
-// Funzione di controllo della variazione dei valori di Volume e Stazione gestiti da interrupt
-#include"checkButtons.h"
+#include "Eeprom.h"
+// Funzione di controllo della variazione dei valori di Volume e Stazione gestiti
+#include "checkButtons.h"
 // Gestione interrupt pulsanti
-#include"interrupt.h"
+//#include"interrupt.h"
+#include "buttons.h"
+// Gestione telecomando
 #include "ir_butt.h"
 // Inclusione funzioni schermo
 // oled
@@ -41,3 +43,5 @@ inline int min(int x, int y) {
   // Gestione output messaggi a schermo
   #include "nexScr.h"
 #endif
+// funzione custom per gestire non linearità del volume sonoro
+#include "map_volume_custom.h"

@@ -3,7 +3,7 @@ bool wifi_connect(){
   WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
   WiFi.setHostname(hostname.c_str()); //define hostname
   //
-  WiFiManager wm;
+  //WiFiManager wm;
   #ifdef TESTWIFI
     wm.resetSettings();
   #endif
@@ -56,22 +56,27 @@ void wifi_start(){
 //Connessione con wifimanager
 void setSsidPw(){
     // put your setup code here, to run once:
-    DEBUG_PRINTLN("\n Starting AP");
-    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
-    WiFiManager wm;
-    //reset settings - for testing
-    //wm.resetSettings();
-    // set configportal TIMEOUT
-    wm.setConfigPortalTimeout(TIMEOUT);
-    if (!wm.startConfigPortal(APEsp32)) {
-        DEBUG_PRINTLN("failed to connect and hit TIMEOUT");
-        delay(3000);
-        //reset and try again, or maybe put it to deep sleep
-        ESP.restart();
-        delay(5000);
-    }else{
-      WiFi.setSleep(false);
-    }
-    //if you get here you have connected to the WiFi
-    DEBUG_PRINTLN("connected...yeey :)");
+    DEBUG_PRINTLN("\n Starting AP in clock mode");
+    
+  //WiFiManager wm;
+  //WiFi.mode(WIFI_AP_STA); // explicitly set mode, esp defaults to STA+AP
+  //reset settings - for testing
+  wm.resetSettings();
+  // set configportal TIMEOUT
+  /* wm.setConfigPortalTimeout(TIMEOUT);
+  if(!wm.startConfigPortal("WRAP")){
+    DEBUG_PRINTLN("Avvio portale fallito");
+    delay(3000);
+    ESP.restart();
+    delay(5000);
+  }else{
+    DEBUG_PRINTLN("Portale avviato");
+  }
+*/
+// Il portale non parte piu se non si cancellano i dati wifi
+// forse sono le librerie aggiornate???
+DEBUG_PRINTLN("Reset config WiFi");
+    delay(3000);
+    ESP.restart();
+    delay(5000);
 }
